@@ -6,7 +6,7 @@ class Listing extends React.Component {
   render () {
     const {
       listings,
-      currentUserId,
+      current_user_id,
       deleteAction
     } = this.props
     return (
@@ -17,7 +17,7 @@ class Listing extends React.Component {
             return(
               <li key={listing.id}>
                 {listing.street} {listing.city} {listing.zip}
-                {listing.user_id === currentUserId &&
+                {listing.user_id === current_user_id &&
                   <div>
                     <button onClick={()=> deleteAction(listing.id)}>delete</button>
                     <Link to={`/edit-listing/${listing.id}`}>Edit</Link>

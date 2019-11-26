@@ -32,6 +32,7 @@ class Entry extends React.Component {
       const{
         street,
         city,
+        zip,
         createSuccess
       } = this.state
       return (

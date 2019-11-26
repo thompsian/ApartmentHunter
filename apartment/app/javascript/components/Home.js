@@ -29,7 +29,7 @@ class Home extends React.Component {
     })
   }
 
-  createListings = (attrs) =>{
+  createListing = (attrs) =>{
     return fetch("/listings",{
       method: 'POST',
       headers:{
@@ -87,7 +87,7 @@ class Home extends React.Component {
             </div>
             {logged_in &&
               <div>
-                <Link to="/new-listings" >New Apartment</Link>
+                <Link to="/new-listing" >New Apartment</Link>
                 <a href={sign_out_route}>Log Out</a>
               </div>
             }
