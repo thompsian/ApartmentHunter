@@ -69,13 +69,18 @@ class Home extends React.Component {
     const {
       logged_in,
       sign_in_route,
-      sign_out_route
+      sign_out_route,
+      current_user_id
     } = this.props
+
+    const{ listings , error } = this.state
 
     return (
       <React.Fragment>
+        {error &&
+          <h2>{error}</h2>
+        }
         <Router>
-          <h1>Apartment Finder</h1>
           <div className="Nav">
             <div>
               <Link to="/">Home</Link>
