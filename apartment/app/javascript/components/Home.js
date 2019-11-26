@@ -10,6 +10,61 @@ import Entry from './pages/Entry'
 import Listing from './pages/Listing'
 
 class Home extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      listings: [],
+      error: null,
+    }
+    this.getListings()
+  }
+
+  getListings = () => {
+    fetch("/listings")
+    .then( response => {
+      return response.json()
+    })
+    .then( listings => {
+      this.setState({listings})
+    })
+  }
+
+  createListings = (attrs) =>{
+    return fetch("/listings",{
+      method: 'POST',
+      headers:{
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({listing: attrs})
+    })
+    .then(response => {
+      if(response.status === 201){
+        this.getListings()
+      }
+    })
+  }
+
+  editListing = (id, attrs) => {
+    console.log("editing", id, attrs)
+  }
+
+  deleteListing = (id) =>{
+    return fetch(`/listings/${id}`, {
+        method: 'DELETE'
+      }
+    ).then(response => {
+      if(response.status === 200){
+        this.getListings()
+      }else{
+        response.json()
+        .then(payload => {
+          this.setState({error: payload.error})
+        })
+      }
+    })
+
+  }
+
   render () {
     const {
       logged_in,
@@ -27,7 +82,7 @@ class Home extends React.Component {
             </div>
             {logged_in &&
               <div>
-                <Link to="./Entry" >New Apartment</Link>
+                <Link to="/new-listings" >New Apartment</Link>
                 <a href={sign_out_route}>Log Out</a>
               </div>
             }
@@ -37,10 +92,47 @@ class Home extends React.Component {
               </div>
             }
           </div>
+          <Route
+            exact
+            path="/"
+            render={ (props) => {
+              return(
+                <Listing
+                  {...props}
+                  listings={listings}
+                  deleteAction = {this.deleteListing}
+                  currentUserId = {current_user_id}
+                />
+              )
+            }}
+          />
 
-          <div>
-            < Listing />
-          </div>
+          {logged_in &&
+          <Switch>
+            <Route
+              path="/new-listing"
+              render={ (props) => {
+                return(
+                  <Entry
+                    {...props}
+                    onSubmit={this.createListing}
+                  />
+                )
+              }}
+            />
+            <Route
+              path="/edit-listing/:id"
+              render={ (props) => {
+                return(
+                  <EditListing
+                    {...props}
+                    onSubmit={this.editListing}
+                  />
+                )
+              }}
+            />
+          </Switch>
+        }
         </Router>
       </React.Fragment>
     );

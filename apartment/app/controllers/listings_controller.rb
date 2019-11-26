@@ -7,7 +7,7 @@ class ListingsController < ApplicationController
   def create
     listing = Listing.create(listing_params)
     if listing.valid?
-      render json: listing
+      render json: listing, status: 201
     else
       render json:listing.errors, status: :unprocessable_entity
     end
